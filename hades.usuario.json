@@ -1,0 +1,7 @@
+{ 
+    "_id" : ObjectId("5a88f1328cdaac2b6c457a4a"), 
+    "codUsuario" : "user", 
+    "nombre" : "Usuario 1", 
+    "clave" : "1234", 
+    "email" : "usuario1@gmail.com"
+}

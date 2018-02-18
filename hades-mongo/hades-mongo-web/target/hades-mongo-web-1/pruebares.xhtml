@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//ES" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="/templates/plantilla.xhtml">
+        <ui:define name="contenido">
+            <p:panel id="mainPnl" header="Reserva" style="width: 80%; margin: auto;">
+                <p:growl id="growl" sticky="true" showDetail="true"/>
+                <p:wizard />
+                <p:tab id="personal" title="Clientes">
+                    <p:panel header="Seleccione un Cliente">
+                        <p:messages />
+                        <p:dataTable var="cliente" value="#{clienteBean.clientes}" 
+                                     selectionMode="single" selection="#{clienteBean.clienteSel}" rowKey="#{cliente.identificacion}">
+                            <p:ajax event="rowSelect" update="@form" />
+                            <p:ajax event="rowUnselect" update="@form" />
+                            <p:column headerText="C&#243;digo">
+                                <h:outputText value="#{cliente.identificacion}" />
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Apellido">
+                                <h:outputText value="#{cliente.apellido}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="Tourtbls" title="Tours">
+                    <p:panel header="Agregue el Tour" >
+                        <p:messages />
+                        <p:dataTable var="tour" value="#{tourBean.tours}" 
+                                     selectionMode="single" selection="#{tourBean.tourSel}" rowKey="#{tour.codigo}">
+                            <p:ajax event="rowSelect" update="@form" />
+                            <p:ajax event="rowUnselect" update="@form" />
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{tour.nombre}" />
+                            </p:column>
+                            <p:column headerText="Fecha Inicio - Fecha Fin">
+                                <h:outputText value="#{tour.fechaInicio}  #{tour.fechaFin}" styleClass="date">
+                                    <f:convertDateTime pattern= "MM/d/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Puerto Embarque">
+                                <h:outputText value="#{tour.puertoEmbarque}" />
+                            </p:column>
+                            <p:column headerText="Puerto Desembarque">
+                                <h:outputText value="#{tour.puertoDesembarque}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{tour.precioBase}" >
+                                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="confirm1" title="Camarotes">
+                    <p:panel header="Seleccione Camarote" >
+                        <p:messages />
+                        <p:dataTable var="camarote" value="#{camaroteAdminBean.camarotes}" 
+                                     selectionMode="single" selection="#{camaroteAdminBean.camaroteSel}" rowKey="#{camarote.codigo}">
+                            <p:ajax event="rowSelect" update="@form" />
+                            <p:ajax event="rowUnselect" update="@form" />
+                            <p:column headerText="N&#250;mero">
+                                <h:outputText value="#{camarote.numero}" />
+                            </p:column>
+                            <p:column headerText="Capacidad">
+                                <h:outputText value="#{camarote.capacidad}" />
+                            </p:column>
+                            <p:column headerText="Ubicaci&#243;n">
+                                <h:outputText value="#{camarote.ubicacion}" >
+
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="confirm" title="Confirmaci&#243;n de Reserva">
+                    <p:panel  header="Reserva">
+                        <p:dataTable id="client" var="reserva" value="#{clienteBean.clienteSel}" >
+                            <p:column headerText="Identificaci&#243;n">
+                                <h:outputText value="#{cliente.identificacion}"  />
+                            </p:column>
+                            <p:column headerText="Nombre del Cliente">
+                                <h:outputText value="#{cliente.nombre}"  />
+                            </p:column>
+                        </p:dataTable>
+                        <p:dataTable id="tbl1" var="Tour" value="#{tourBean.tourSel}" >
+                            <p:column headerText="Nombre del Tour">
+                                <h:outputText value="#{tour.nombre}"  />
+                            </p:column>
+                            <p:column headerText="Crucero">
+                                <h:outputText value="#{tour.crucero.nombre}"  />
+                            </p:column>
+                            <p:column headerText="Fecha de Salida">
+                                <h:outputText value="#{tour.fechaInicio}"  > 
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Puerto de embarque">
+                                <h:outputText value="#{tour.puertoEmbarque}"  >
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Precio Base">
+                                <h:outputText value="#{tour.precioBase}"  >
+                                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Estado">
+
+                            </p:column>
+                            <f:facet name="footer">
+                                Total a pagar $: 
+                                <h:outputText value="1">
+                                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2" currencySymbol="$"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:dataTable>
+                        
+                        <h:commandLink>
+                            <p:graphicImage value="/images/export.png" />
+                            <p:dataExporter type="pdf" target="tbl,tbl1"  fileName="compra" pageOnly="true" />
+                        </h:commandLink>
+
+                    </p:panel>
+                </p:tab>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>

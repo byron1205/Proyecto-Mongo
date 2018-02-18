@@ -153,7 +153,6 @@ public class AutorizacionFilter extends BaseBean implements Filter {
     public void init(FilterConfig filterConfig) {        
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-            
         }
     }
 

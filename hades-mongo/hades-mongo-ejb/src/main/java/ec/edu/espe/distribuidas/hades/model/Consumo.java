@@ -7,23 +7,28 @@
  */
 package ec.edu.espe.distribuidas.hades.model;
 
+import ec.edu.espe.distribuidas.nosql.mongo.BaseEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
  * @author Hades Cruise Corp.
  */
-@Embedded
-public class Consumo implements Serializable {
+//@Embedded
+@Entity(noClassnameStored = true, value = "consumo")
+public class Consumo extends BaseEntity  {
 
+    
     @Reference
     private Reserva reserva;
     @Reference
     private Menu menu;
+    
     private Integer cantidad;
     private BigDecimal valor;
     private Date fecha;
@@ -78,5 +83,10 @@ public class Consumo implements Serializable {
 
     public void setReferencia(String referencia) {
         this.referencia = referencia;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }

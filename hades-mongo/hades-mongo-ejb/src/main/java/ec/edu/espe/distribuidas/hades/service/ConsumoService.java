@@ -12,9 +12,11 @@ import ec.edu.espe.distribuidas.hades.dao.ConsumoDAO;
 import ec.edu.espe.distribuidas.hades.model.Camarote;
 import ec.edu.espe.distribuidas.hades.model.Consumo;
 import ec.edu.espe.distribuidas.hades.model.Crucero;
+import ec.edu.espe.distribuidas.hades.model.Menu;
 import ec.edu.espe.distribuidas.hades.model.Reserva;
 import ec.edu.espe.distribuidas.hades.model.TipoCamarote;
 import ec.edu.espe.distribuidas.nosql.mongo.MongoPersistence;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -45,10 +47,24 @@ public class ConsumoService {
     public List<Consumo> obtenerPorReserva(Reserva reserva) {
         return this.consumoFacade.findByReserva(reserva);
     }
+    public List<Consumo> obtenerPorReservaMenu(Reserva reserva, Menu menu) {
+        return this.consumoFacade.findByReservaMenu(reserva, menu);
+    }
+    
+    public List<Consumo> obtenerPorFecha(Date dateI, Date dateF) {
+        return this.consumoFacade.findFecha(dateI, dateF);
+    }
+    
+    public Consumo obternerPorCodido(String codigo){
+        return this.consumoFacade.findOne("reserva", codigo);
+    }
+    
+    
 
     public void crear(Consumo consumo) {
         this.consumoFacade.save(consumo);
     }
+  
 
     public void modificar(Consumo consumo) {
         Consumo aux = this.consumoFacade.findOne("codigo", consumo.getReserva());

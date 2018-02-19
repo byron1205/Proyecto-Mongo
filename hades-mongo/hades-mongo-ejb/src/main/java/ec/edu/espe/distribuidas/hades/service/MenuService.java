@@ -38,7 +38,7 @@ public class MenuService {
         return this.menuDao.find().asList();
     }
 
-    public Menu obtenerPorCodigo(String codigo) {
+    public Menu obtenerPorCodigo(Integer codigo) {
         return this.menuDao.findOne("codigo", codigo);
     }
 

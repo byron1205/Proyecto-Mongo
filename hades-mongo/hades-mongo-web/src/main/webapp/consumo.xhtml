@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//ES" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="/templates/plantilla.xhtml">
+        <ui:define name="contenido">
+            <p:panel id="mainPnl" header="Registro de Consumo" style="width: 80%; margin: auto;">
+
+                <p:panel id="buscPnl" header="B&#250;squeda">
+
+                    <p:panelGrid id="buscar" columns="2" style="margin-top:10px">
+
+                        <p:outputLabel for="filtroCmb1" value="Buscar:" />
+                        <p:selectOneMenu id="filtroCmb1" value="#{consumoAdminBean.filtro}"  >
+                            
+                            <f:selectItem itemLabel="Todas las Reservas" itemValue="RES" />
+                            <f:selectItem itemLabel="Menu" itemValue="MEN" />
+                            <f:selectItem itemLabel="Fecha" itemValue="FEC" />
+                            <p:ajax update="@form" listener="#{consumoAdminBean.cambiarFiltro()}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="codigo1" value="C&#243;digo de Reserva" />
+                        <p:inputText id="codigo1" value="#{consumoAdminBean.codReserva}"  />
+
+                        <p:outputLabel for="filtroCmb2" value="Seleccione el tipo de consumo" rendered="#{consumoAdminBean.enBusquedaPorMenu}"/>
+                            <p:selectOneMenu id="filtroCmb2" value="#{consumoAdminBean.tipoMenu}"  rendered="#{consumoAdminBean.enBusquedaPorMenu}">
+                                <p:ajax listener="#{consumoAdminBean.buscarPorTipoMenu}" />                          
+                                <f:selectItem itemLabel="Entrada" itemValue="ENT" />
+                                <f:selectItem itemLabel="Snacks" itemValue="SNA" />
+                                <f:selectItem itemLabel="Bebida Alcoholica" itemValue="BCA" />
+                                <f:selectItem itemLabel="Bebida Sin Alcohol" itemValue="BSA" />
+                                <p:ajax update="listFilCon filtroConsumo" />
+                            </p:selectOneMenu>
+
+                        <p:outputLabel id="listFilCon" for="filtroConsumo" value="Seleccione lo que desea" rendered="#{consumoAdminBean.enBusquedaPorMenu}"/>
+                            <p:selectOneMenu id="filtroConsumo" value="#{consumoAdminBean.codMenu}" rendered="#{consumoAdminBean.enBusquedaPorMenu}">                                                       
+                                <p:ajax update="listFilCon filtroConsumo" />
+                                <f:selectItem itemLabel="Seleccionar.." itemValue="" />
+                                <f:selectItems var="men" value="#{consumoAdminBean.tiposMenuB}" itemLabel="#{men.nombre}" itemValue="#{men.codigo}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="FecgaFinCal" value="Fecha inicio:" rendered="#{consumoAdminBean.enBusquedaPorFecha}"/>
+                            <p:calendar id="FecgaFinCal" value="#{consumoAdminBean.fechaInicioBusqueda}" showOn="button" pattern="MM/dd/yyyy" rendered="#{consumoAdminBean.enBusquedaPorFecha}" />
+                            <p:outputLabel for="fechaFinCal" value="Fecha Fin:" rendered="#{consumoAdminBean.enBusquedaPorFecha}"/>
+                            <p:calendar id="fechaFinCal" value="#{consumoAdminBean.fechaFinBusqueda}" showOn="button" pattern="MM/dd/yyyy" rendered="#{consumoAdminBean.enBusquedaPorFecha}" />
+
+
+                    </p:panelGrid>
+
+                    <p:commandButton id="buscarCmd" value="Buscar" actionListener="#{consumoAdminBean.buscar()}" update="@form" />
+                </p:panel>
+
+                <p:dataTable var="consumo" value="#{consumoAdminBean.consumos}"
+                             selectionMode="single" selection="#{consumoAdminBean.consumoSel}" rowKey="#{consumo.id}">
+
+                    <p:ajax event="rowSelect" update="@form" />
+                    <p:ajax event="rowUnselect" update="@form" />
+
+                    <p:column headerText="Consumo">
+                        <h:outputText value="#{consumo.menu.nombre}" />
+                    </p:column>
+                    <p:column headerText="Precio">
+                        <h:outputText value="#{consumo.menu.precio}" />
+                    </p:column>
+                    <p:column headerText="Cantidad">
+                        <h:outputText value="#{consumo.cantidad}" />
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{consumo.valor}" />
+                    </p:column>
+                    <p:column headerText="Fecha">
+                        <h:outputText value="#{consumo.fecha}" />
+                    </p:column>
+                    <p:column headerText="Referencia">
+                        <h:outputText value="#{consumo.referencia}" />
+                    </p:column>
+
+                </p:dataTable>
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                <p:commandButton value="Agregar" actionListener="#{consumoAdminBean.agregar()}" update="@form"/>
+                <p:commandButton id="modBtn" value="Modificar" actionListener="#{consumoAdminBean.modificar()}" update="@form" disabled="#{consumoAdminBean.consumoSel eq null}"/>
+                <p:commandButton value="Eliminar" actionListener="#{consumoAdminBean.eliminar()}" update="@form" disabled="#{consumoAdminBean.consumoSel eq null}" >
+                    <p:confirm header="Confirmaci&#243;n" message="Desea eliminar el Consumo: #{consumoAdminBean.consumoSel.menu.nombre}}" icon="ui-icon-alert" />
+                </p:commandButton>
+
+
+                <p:panel header="#{consumoAdminBean.titulo} Consumo" visible="#{consumoAdminBean.habilitaForm}">
+                    <p:panelGrid columns="2" style="margin-top:10px">
+
+                        <p:outputLabel for="codigo" value="C&#243;digo de Reserva" />
+                        <p:inputText id="codigo" value="#{consumoAdminBean.reserva.codigo}"  />
+
+                        <p:outputLabel for="filtroCmb" value="Seleccione el tipo de consumo" />
+                        <p:selectOneMenu id="filtroCmb" value="#{consumoAdminBean.menu.tipo}" required="true">
+                            <f:selectItem itemLabel="Entrada" itemValue="ENT" />
+                            <f:selectItem itemLabel="Snacks" itemValue="SNA" />
+                            <f:selectItem itemLabel="Bebida Alcoholica" itemValue="BCA" />
+                            <f:selectItem itemLabel="Bebida Sin Alcohol" itemValue="BSA" />
+                            <p:ajax update="listM listMenu cantidad valor" />  
+                            <p:ajax listener="#{consumoAdminBean.buscarPorTipo}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel id="listM" for="listMenu" value="Seleccione lo que desea" />
+                        <p:selectOneMenu id="listMenu" value="#{consumoAdminBean.menu.codigo}">                            
+                            <f:selectItem itemLabel="Seleccionar.." itemValue="#{0}" />
+                            <f:selectItems var="menus" value="#{consumoAdminBean.listaMenu}" itemLabel="#{menus.nombre} - $#{menus.precio}" itemValue="#{menus.codigo}" />
+                            <p:ajax update="listM listMenu " />
+                            <p:ajax event="change" update="valor cantidad" listener="#{consumoAdminBean.calcularValor()}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="cantidad" value="Cantidad" />
+                        <p:spinner id="cantidad" value="#{consumoAdminBean.consumo.cantidad}" min="1" valueChangeListener="#{consumoAdminBean.calcularValor()}">
+                            <p:ajax event="keyup" update="valor" listener="#{consumoAdminBean.calcularValor()}" />
+                            <p:ajax event="click" update="valor" listener="#{consumoAdminBean.calcularValor()}" />
+                            <p:ajax event="change" update="valor" listener="#{consumoAdminBean.calcularValor()}"/>
+                            <p:ajax update="listM listMenu" />
+                        </p:spinner>
+
+                        <p:outputLabel for="valor" value="Valor"/>
+                        <p:inputText id="valor" value="#{consumoAdminBean.consumo.valor}"   disabled="true"/>
+
+                        <p:outputLabel for="referencia" value="Referencia" />
+                        <p:inputText id="referencia" value="#{consumoAdminBean.consumo.referencia}"  />
+                    </p:panelGrid>
+                    <p:commandButton value="Aceptar" actionListener="#{consumoAdminBean.guardar}" update="@form" />
+                    <p:commandButton value="Cancelar" actionListener="#{consumoAdminBean.cancelar}" update="@form" />
+                </p:panel>
+
+            </p:panel>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </ui:define>
+    </ui:composition>
+</html>

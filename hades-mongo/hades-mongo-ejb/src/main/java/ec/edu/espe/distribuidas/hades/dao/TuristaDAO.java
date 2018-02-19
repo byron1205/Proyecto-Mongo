@@ -8,6 +8,7 @@
 package ec.edu.espe.distribuidas.hades.dao;
 
 import ec.edu.espe.distribuidas.hades.model.Cliente;
+import ec.edu.espe.distribuidas.hades.model.Reserva;
 import ec.edu.espe.distribuidas.hades.model.TuristaReserva;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -29,5 +30,11 @@ public class TuristaDAO extends BasicDAO<TuristaReserva, ObjectId> {
         Query<Cliente> qry = getDatastore().createQuery(Cliente.class);
         qry.criteria("identificacion").equal(identificacion);
         return  qry.asList();
+    }
+    
+    public List<TuristaReserva> findByReserva(Integer reserva) {
+        Query<TuristaReserva> qry = getDatastore().createQuery(TuristaReserva.class);
+        qry.criteria("codReserva").equal(reserva);
+        return qry.asList();
     }
 }

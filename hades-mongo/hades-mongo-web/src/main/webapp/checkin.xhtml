@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="/templates/plantilla.xhtml">
+        <ui:define name="contenido">
+            <p:panel id="mainPnl" header="Turistas" style="width: 50%; margin: auto;">
+
+                <p:panel id="buscar" header="Buscar" >
+                    <p:outputLabel for="codigo" value="C&#243;digo de Reserva" />
+                    <p:inputText id="codigo" value="#{checkinBean.codReserva}"  />
+                    <p:commandButton id="buscarCmd" value="Buscar" actionListener="#{checkinBean.buscar()}" update="@form"/>
+                </p:panel>
+                
+                <p:panel>
+                    <center><b><h:outputText id="tipoTour" value="#{checkinBean.tipoTour.nombre}"/></b></center>
+                </p:panel>
+
+                <p:tabView orientation="left" var="turista" value="#{checkinBean.listaTurista}">
+                    <p:tab title="#{turista.nombre}">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel for="identificacion" value="Identificación" />
+                            <p:inputText id="identificacion" value="#{turista.identificacion}" disabled="true" />
+                            <p:outputLabel for="nombre" value="Nombre" />
+                            <p:inputText id="nombre" value="#{turista.nombre}" disabled="true"  />
+                            <p:outputLabel for="fechaN" value="Fecha de Nacimiento" />
+                            <p:inputText id="fechaN" value="#{turista.fechaNacimiento}" disabled="true"  />
+                            <p:outputLabel for="peso" value="Peso Maleta" />
+                            <p:inputNumber id="peso" value="#{turista.pesoMaleta}" maxValue="#{checkinBean.maximo}" minValue="0">
+                                <p:ajax event="keyup" update="valor" listener="#{turista.setValorMaleta(checkinBean.calcularValor(turista.pesoMaleta))}"/>
+                            </p:inputNumber>
+                            <p:outputLabel for="valor" value="Valor Maleta" />
+                            <p:inputText id="valor" value="#{turista.valorMaleta}" disabled="true" />
+                        </p:panelGrid>
+                        <p:commandButton value="Actualizar" actionListener="#{checkinBean.guardar(turista)}" update="@form" />
+                    </p:tab>
+
+                </p:tabView>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>

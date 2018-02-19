@@ -85,7 +85,7 @@ public class TuristaBean extends BaseBean implements Serializable {
 
     public void guardar() {
        int a= new Random().nextInt(10000);
-       turista.setReserva(retornaReserva(reserva));
+       //turista.setReserva(retornaReserva(reserva));
        try {
              if (this.enAgregar) {
                 this.turistaService.crear(this.turista);
@@ -141,20 +141,7 @@ public class TuristaBean extends BaseBean implements Serializable {
         this.turistaSel = turistaSel;
     }
 
-    public Reserva retornaReserva(Reserva reserva)
-    {
-        Reserva aux = new Reserva();
-        
-        for(int i= 0; i<reservas.size();i++)
-        {
-            aux= reservas.get(i);
-            if(aux.getCodigo().equals(reserva.getTipoTour().getCodigo()))
-            {
-                break;
-            }
-        }
-        return aux;
-    }
+    
     
     
 }

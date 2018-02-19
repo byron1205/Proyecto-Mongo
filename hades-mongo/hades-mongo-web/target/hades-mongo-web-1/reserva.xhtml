@@ -8,146 +8,133 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition template="/templates/plantilla.xhtml">
         <ui:define name="contenido">
-            <p:panel id="mainPnl" header="Reserva" style="width: 80%; margin: auto;">
-                <p:growl id="growl" sticky="true" showDetail="true"/>
-                <p:wizard >
-                    <p:tab id="personal" title="Clientes">
-                        <p:panel header="Seleccione un Cliente">
-                            <p:messages />
-                            <p:dataTable var="cliente" value="#{clienteBean.clientes}" 
-                                         selectionMode="single" selection="#{clienteBean.clienteSel}" rowKey="#{cliente.identificacion}">
-                                <p:ajax event="rowSelect" update="@form" />
-                                <p:ajax event="rowUnselect" update="@form" />
-                                <p:column headerText="Codigo">
-                                    <h:outputText value="#{cliente.identificacion}" />
-                                </p:column>
-                                <p:column headerText="Nombre">
-                                    <h:outputText value="#{cliente.nombre}" />
-                                </p:column>
-                                <p:column headerText="Apellido">
-                                    <h:outputText value="#{cliente.apellido}" />
-                                </p:column>
-                            </p:dataTable>
-                        </p:panel>
-                    </p:tab>
-                    <p:tab id="address" title="Tours">
-                        <p:panel header="Agregue el Tour" >
-                            <p:messages />
-                            <p:dataTable var="tour" value="#{tourBean.tours}" 
-                                         selectionMode="single" selection="#{tourBean.tourSel}" rowKey="#{tour.codigo}">
-                                <p:ajax event="rowSelect" update="@form" />
-                                <p:ajax event="rowUnselect" update="@form" />
-                                <p:column headerText="Nombre">
-                                    <h:outputText value="#{tour.nombre}" />
-                                </p:column>
-                                <p:column headerText="Fecha Inicio - Fecha Fin">
-                                    <h:outputText value="#{tour.fechaInicio} - #{tour.fechaFin} " />
-                                </p:column>
-                                <p:column headerText="Puerto Embarque">
-                                    <h:outputText value="#{tour.puertoEmbarque}" />
-                                </p:column>
-                                <p:column headerText="Puerto Desembarque">
-                                    <h:outputText value="#{tour.puertoDesembarque}" />
-                                </p:column>
-                                <p:column headerText="Precio">
-                                    <h:outputText value="#{tour.precioBase}" />
-                                    
-                                </p:column>
+            <p:panel id="mainPnl" header="Reserva" style="width: 90%; margin: auto;">
+                <p:panel id="tourPnl" header="Tour">
 
-                            </p:dataTable>
+                    <p:panelGrid columns="4" style="margin-top:10px">
+                        <p:outputLabel for="filtroCmb" value="Buscar:" />
+                        <p:selectOneMenu id="filtroCmb" value="#{reservaBean.filtro}" required="true"  valueChangeListener="#{reservaBean.cambiarFiltro()}" >
+                            <p:ajax update="@form" />
+                            <f:selectItem itemLabel="Tipo Tour" itemValue="TIP" />
+                            <f:selectItem itemLabel="Fechas" itemValue="FEC" />
+                        </p:selectOneMenu>
+                        <p:selectOneMenu id="tiposTourCmb" value="#{reservaBean.tipoTourBusqueda}" rendered="#{reservaBean.enBusquedaPorTipo}">
+                            <f:selectItems var="tipoTour" value="#{reservaBean.tiposTours}" itemLabel="#{tipoTour.nombre}" itemValue="#{tipoTour.codigo}" />
+                        </p:selectOneMenu>
+                        <p:calendar id="fechaInicioCal" value="#{reservaBean.fechaInicioBusqueda}" showOn="button" pattern="MM/dd/yyyy" rendered="#{not reservaBean.enBusquedaPorTipo}" />
+                        <p:calendar id="fechaFinCal" value="#{reservaBean.fechaFinBusqueda}" showOn="button" pattern="MM/dd/yyyy" rendered="#{not reservaBean.enBusquedaPorTipo}" />
+                    </p:panelGrid>
+                    <p:commandButton id="buscarCmd" value="Buscar" actionListener="#{reservaBean.buscarTour()}" update="@form" />
 
-                        </p:panel>
-                    </p:tab>
-                    <p:tab id="confirm1" title="Camarotes">
-                        <p:panel header="Seleccione Camarote" >
-                            <p:messages />
-                            <p:dataTable var="camarote" value="#{camaroteAdminBean.camarotes}" 
-                                         selectionMode="single" selection="#{camaroteAdminBean.camaroteSel}" rowKey="#{camarote.codigo}">
-                                <p:ajax event="rowSelect" update="@form" />
-                                <p:ajax event="rowUnselect" update="@form" />
-                                <p:column headerText="Numero">
-                                    <h:outputText value="#{camarote.numero}" />
-                                </p:column>
-                                <p:column headerText="Numero">
-                                    <h:outputText value="#{camarote.tipo.nombre}" />
-                                </p:column>
-                                <p:column headerText="Capacidad">
-                                    <h:outputText value="#{camarote.capacidad}" />
-                                </p:column>
-                                <p:column headerText="Ubicacion">
-                                    <h:outputText value="#{camarote.ubicacion}" >
-
-                                    </h:outputText>
-                                </p:column>
-                            </p:dataTable>
-
-                        </p:panel>
+                    <p:panel id="muesTour" header="Lista de tours">
+                        <p:dataTable id="toursTbl" var="tour" value="#{reservaBean.tours}"
+                                     selectionMode="single" selection="#{reservaBean.tourSel}" rowKey="#{tour.codigo}">
+                            <p:ajax event="rowSelect" update="@form" />
+                            <p:ajax event="rowUnselect" update="@form" />
+                            <p:column headerText="C&#243;digo">
+                                <h:outputText value="#{tour.codigo}" />
+                            </p:column>
+                            <p:column headerText="Tipo Tour">
+                                <h:outputText value="#{tour.tipoTour.nombre}" />
+                            </p:column>
+                            <p:column headerText="Crucero">
+                                <h:outputText value="#{tour.crucero.nombre}" />
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{tour.nombre}" />
+                            </p:column>
+                            <p:column headerText="Duraci&#243;n">
+                                <h:outputText value="#{tour.duracion}" />
+                            </p:column>
+                            <p:column headerText="Fecha Inicio">
+                                <h:outputText value="#{tour.fechaInicio}" styleClass="date">
+                                    <f:convertDateTime pattern=" MM/d/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Fecha Fin">
+                                <h:outputText value="#{tour.fechaFin}" styleClass="date">
+                                    <f:convertDateTime pattern=" MM/d/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Puerto Embarque">
+                                <h:outputText value="#{tour.puertoEmbarque}" />
+                            </p:column>
+                            <p:column headerText="Puerto Desembarque">
+                                <h:outputText value="#{tour.puertoDesembarque}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="Seleccionar" actionListener="#{reservaBean.elegirTour()}" update="@form"/>
+                    </p:panel>
+                </p:panel>
 
 
-                    </p:tab>
+                <p:panel id="clientePnl" header="Cliente" rendered="#{reservaBean.enTourElegido}" >
+                    <p:outputLabel for="identificacion" value="Identificacion:" />
+                    <p:inputText id="identificacion" value="#{reservaBean.identificacionBusqueda}" required="true" >
+                    </p:inputText>
+                    <p:commandButton id="btnCliente" value="Buscar" actionListener="#{reservaBean.buscarCliente()}" update="@form"/>
+                    <p:dataTable var="cliente" value="#{reservaBean.cliente}"  rowKey="#{cliente.id}">
+                        <f:facet name="header">
+                            Cliente
+                        </f:facet>
+                        <p:column headerText="Identificaci&#243;n">
+                            <h:outputText value="#{cliente.identificacion}" />
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{cliente.nombre}" />
+                        </p:column>
+                        <p:column headerText="Apellido">
+                            <h:outputText value="#{cliente.apellido}" />
+                        </p:column>
+                        <p:column headerText="Direcci&#243;n">
+                            <h:outputText value="#{cliente.direccion}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
 
-                    <p:tab id="confirm" title="Confirmacion de Reserva">
-                        <p:panel  header="Reserva">
+                <p:panel id="camarotePnl" header="Camarotes" rendered="#{reservaBean.enEncontrado}" >
 
-                            <p:dataTable id="tbl" var="cliente" value="#{clienteBean.clienteSel}" 
-                                         >
-                                <p:column headerText="Identificacion">
-                                    <h:outputText value="#{cliente.identificacion}"  />
-                                </p:column>
-                                <p:column headerText="Nombre del Cliente">
-                                    <h:outputText value="#{cliente.nombre}"  />
-                                </p:column>
-                                <p:column headerText="Fecha">
-                                    <h:outputText value="#{clienteBean.fecha()}"  />
-                                </p:column>
-                            </p:dataTable>
+                    <p:dataTable id="camaroteTbl" var="camarote" value="#{reservaBean.camarotes}"
+                                 selectionMode="single" selection="#{reservaBean.camaroteSel}" rowKey="#{camarote.id}">
+                        <p:ajax event="rowSelect" update="@form" />
+                        <p:ajax event="rowUnselect" update="@form" />
+                        <p:column headerText="Numero">
+                            <h:outputText value="#{camarote.numero}" />
+                        </p:column>
+                        <p:column headerText="Capacidad">
+                            <h:outputText value="#{camarote.capacidad}" />
+                        </p:column>
+                        <p:column headerText="Ubicaci&#243;n">
+                            <h:outputText value="#{camarote.ubicacion}" />
+                        </p:column>
+                    </p:dataTable>
 
-                            <p:dataTable id="tbl1" var="tour" value="#{tourBean.tourSel}" 
-                                         >
-                                <p:column headerText="Nombre del Tour">
-                                    <h:outputText value="#{tour.nombre}"  />
-                                </p:column>
-                                <p:column headerText="Crucero">
-                                    <h:outputText value="#{tour.crucero.nombre}"  />
-                                </p:column>
-                                <p:column headerText="Fecha de Salida">
-                                    <h:outputText value="#{tour.fechaInicio}"  > 
-                                    </h:outputText>
-                                </p:column>
-                                <p:column headerText="Puerto de embarque">
-                                    <h:outputText value="#{tour.puertoEmbarque}"  >
-                                    </h:outputText>
-                                </p:column>
+                </p:panel>
 
-                                <p:column headerText="Precio Base">
-                                    <h:outputText value="#{tour.precioBase}"  >
-                                      
-                                    </h:outputText>
-                                </p:column>
-                                <p:column headerText="Estado">
+                <p:panel id="alimentacionPnl" header="Tipo de Alimentacion" >
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="alimentacionCmb" value="Alimentacion" />
+                        <p:selectOneMenu id="alimentacionCmb" value="#{reservaBean.codigoTipoAlimentacion}">
+                            <f:selectItems var="alimentacion" value="#{reservaBean.tiposAlimentacion}" itemLabel="#{alimentacion.descripcion}" itemValue="#{alimentacion.codigo}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    
+                </p:panel>
+                <p:panel id="reservaPnl" header="Reserva" rendered="#{reservaBean.enEncontrado}">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="valorFinal" value="ValorFinal" />
+                        <p:inputText id="valorFinal" value="#{reservaBean.reserva.valorFinal}"  required="true" requiredMessage="Debe ingresara el valor Final"/>
+                        <p:outputLabel for="fecha" value="Fecha Emision" />
+                        <p:calendar id="fecha" value="#{reservaBean.reserva.fechaEmision}" showOn="button" />
+                        <p:outputLabel for="estadoResCmb" value="Estado" />
+                        <p:selectOneMenu id="estadoResCmb" value="#{reservaBean.reserva.estado}" required="true">
+                            <f:selectItem itemLabel="PRE-RESERVA" itemValue="PRE" />
+                            <f:selectItem itemLabel="RESERVADO" itemValue="RES" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton value="Seleccionar" actionListener="#{reservaBean.guardar()}" update="@form"/>
+                </p:panel>
 
-                                </p:column>
-                                <f:facet name="footer">
-                                    Total a pagar $: <h:outputText value="1">
-                                        
-                                    </h:outputText>
-                                </f:facet>
-                            </p:dataTable>
-                            
-                         
-                        </p:panel> 
-
-                        <h:outputText />
-                        <h:outputText />
-
-                        <h:commandLink>
-                            <p:graphicImage value="/images/export.png" />
-                            <p:dataExporter type="pdf" target="tbl,tbl1"  fileName="compra" pageOnly="true" />
-                        </h:commandLink>
-                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-
-                    </p:tab>
-                </p:wizard>
             </p:panel>
 
 
@@ -155,4 +142,3 @@
     </ui:composition>
 </html>
 
-                            

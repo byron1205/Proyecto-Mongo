@@ -45,20 +45,20 @@ public class ReservaService {
     
  
     public void crear(Reserva reserva) {
-        List<Reserva> aux = this.reservaFacade.find().asList();
-        Integer codigo;
-        String res="RS0";
-        StringBuilder codigofinal = new StringBuilder();
-        if (aux.isEmpty()) {
-            codigo = 1;
-        } else {
-            Integer count = aux.size();
-            Reserva last = aux.get(count - 1);
-            codigo = Integer.parseInt(last.getCodigo() + 1);
-        }
-        codigofinal.append(res);
-        codigofinal.append(codigo.toString());
-        reserva.setCodigo(codigofinal.toString());
+//        List<Reserva> aux = this.reservaFacade.find().asList();
+//        Integer codigo;
+//        String res="RS0";
+//        StringBuilder codigofinal = new StringBuilder();
+//        if (aux.isEmpty()) {
+//            codigo = 1;
+//        } else {
+//            Integer count = aux.size();
+//            Reserva last = aux.get(count - 1);
+//            codigo = Integer.parseInt(last.getCodigo() + 1);
+//        }
+//        codigofinal.append(res);
+//        codigofinal.append(codigo.toString());
+//        reserva.setCodigo(codigofinal.toString());
         this.reservaFacade.save(reserva);
     }
     

@@ -6,14 +6,15 @@
 package ec.edu.espe.distribuidas.hades.model;
 
 import java.math.BigDecimal;
-import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
  * @author hendrix
  */
-@Embedded
+//@Embedded
+@Entity(noClassnameStored = true, value = "precioCamarote")
 public class PrecioCamarote {
     
     @Reference

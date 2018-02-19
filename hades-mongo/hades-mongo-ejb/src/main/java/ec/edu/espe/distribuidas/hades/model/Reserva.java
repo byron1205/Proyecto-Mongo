@@ -25,20 +25,20 @@ public class Reserva extends BaseEntity{
     
     @Indexed(options = @IndexOptions(name = "reserva_codigoUIdx", unique = true))
     private String codigo;
-    private String identificacion;
-    private String tipoIdentificacion;
+//    private String identificacion;
+//    private String tipoIdentificacion;
     @Reference
     private Tour tour;
-    @Reference
-    private TipoTour tipoTour;
-    @Reference
-    private Crucero crucero;
-    @Reference
+//    @Reference
+//    private TipoTour tipoTour;
+//    @Reference
+//    private Crucero crucero;
+   @Reference
     private Camarote camarote;
     @Reference
     private TipoAlimentacion tipoAlimentacion;
-    @Reference
-    private TipoCamarote tipoCamarote;
+//    @Reference
+//    private TipoCamarote tipoCamarote;
     @Reference
     private Cliente cliente;
     private BigDecimal valorFinal;
@@ -73,21 +73,7 @@ public class Reserva extends BaseEntity{
         this.codigo = codigo;
     }
 
-    public String getIdentificacion() {
-        return identificacion;
-    }
-
-    public void setIdentificacion(String identificacion) {
-        this.identificacion = identificacion;
-    }
-
-    public String getTipoIdentificacion() {
-        return tipoIdentificacion;
-    }
-
-    public void setTipoIdentificacion(String tipoIdentificacion) {
-        this.tipoIdentificacion = tipoIdentificacion;
-    }
+    
 
     public Tour getTour() {
         return tour;
@@ -97,21 +83,6 @@ public class Reserva extends BaseEntity{
         this.tour = tour;
     }
 
-    public TipoTour getTipoTour() {
-        return tipoTour;
-    }
-
-    public void setTipoTour(TipoTour tipoTour) {
-        this.tipoTour = tipoTour;
-    }
-
-    public Crucero getCrucero() {
-        return crucero;
-    }
-
-    public void setCrucero(Crucero crucero) {
-        this.crucero = crucero;
-    }
 
     public Camarote getCamarote() {
         return camarote;
@@ -119,14 +90,6 @@ public class Reserva extends BaseEntity{
 
     public void setCamarote(Camarote camarote) {
         this.camarote = camarote;
-    }
-
-    public TipoCamarote getTipoCamarote() {
-        return tipoCamarote;
-    }
-
-    public void setTipoCamarote(TipoCamarote tipoCamarote) {
-        this.tipoCamarote = tipoCamarote;
     }
 
     public BigDecimal getValorFinal() {
@@ -155,7 +118,7 @@ public class Reserva extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Reserva{" + "codigo=" + codigo + ", identificacion=" + identificacion + ", tipoIdentificacion=" + tipoIdentificacion + ", tour=" + tour + ", tipoTour=" + tipoTour + ", crucero=" + crucero + ", camarote=" + camarote + ", tipoCamarote=" + tipoCamarote + ", valorFinal=" + valorFinal + ", fechaEmision=" + fechaEmision + ", estado=" + estado + '}';
+        return "Reserva{" + "codigo=" + codigo +  ", valorFinal=" + valorFinal + ", fechaEmision=" + fechaEmision + ", estado=" + estado + ", TipoAli=" + tipoAlimentacion + ", cliente=" + cliente  + ", tour=" + tour + ", camarote=" + camarote +  '}';
     }
     
     @Override

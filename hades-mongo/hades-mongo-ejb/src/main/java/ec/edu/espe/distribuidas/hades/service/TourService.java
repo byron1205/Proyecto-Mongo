@@ -13,6 +13,7 @@ import ec.edu.espe.distribuidas.hades.model.Tour;
 import ec.edu.espe.distribuidas.nosql.mongo.MongoPersistence;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -26,6 +27,9 @@ import javax.ejb.Stateless;
 @LocalBean
 public class TourService {
 
+    private static final Logger LOG = Logger.getLogger(TourService.class.getName());
+
+    
     @EJB
     private MongoPersistence mp;
     private TourDAO tourDAO;
@@ -48,7 +52,9 @@ public class TourService {
             Integer count = aux.size();
             Tour last = aux.get(count - 1);
             codigo = last.getCodigo() + 1;
+            
         }
+        LOG.info(""+codigo);
         tour.setCodigo(codigo);
         this.tourDAO.save(tour);
     }

@@ -36,8 +36,8 @@ public class Tour extends BaseEntity {
     private TipoTour tipoTour;
     @Reference
     private Crucero crucero;
-    @Embedded
-    private List<PrecioCamarote> precios;
+//    @Embedded
+//    private List<PrecioCamarote> precios;
 
     public Tour()
     {
@@ -125,13 +125,13 @@ public class Tour extends BaseEntity {
         this.crucero = crucero;
     }
 
-    public List<PrecioCamarote> getPrecios() {
-        return precios;
-    }
-
-    public void setPrecios(List<PrecioCamarote> precios) {
-        this.precios = precios;
-    }
+//    public List<PrecioCamarote> getPrecios() {
+//        return precios;
+//    }
+//
+//    public void setPrecios(List<PrecioCamarote> precios) {
+//        this.precios = precios;
+//    }
 
     public Integer getCodigo() {
         return codigo;
@@ -143,7 +143,7 @@ public class Tour extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Tour{" + "codigo=" + codigo + ", nombre=" + nombre + ", duracion=" + duracion + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", puertoEmbarque=" + puertoEmbarque + ", puertoDesembarque=" + puertoDesembarque + ", precioBase=" + precioBase + ", porcentajeMenu=" + porcentajeMenu + ", tipoTour=" + tipoTour + ", crucero=" + crucero + ", precios=" + precios + '}';
+        return "Tour{" + "codigo=" + codigo + ", nombre=" + nombre + ", duracion=" + duracion + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", puertoEmbarque=" + puertoEmbarque + ", puertoDesembarque=" + puertoDesembarque + ", precioBase=" + precioBase + ", porcentajeMenu=" + porcentajeMenu + ", tipoTour=" + tipoTour + ", crucero=" + crucero + ", precios=" + '}';
     }
 
     @Override

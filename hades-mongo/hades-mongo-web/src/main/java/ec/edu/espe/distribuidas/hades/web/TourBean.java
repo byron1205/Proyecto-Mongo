@@ -17,6 +17,7 @@ import ec.edu.espe.distribuidas.hades.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -30,6 +31,10 @@ import javax.inject.Named;
 @ViewScoped
 public class TourBean extends BaseBean implements Serializable {
 
+    private static final Logger LOG = Logger.getLogger(TourBean.class.getName());
+
+    
+    
     private String filtro;
     private String tipoTourBusqueda;
     private boolean enBusquedaPorTipo;
@@ -40,7 +45,8 @@ public class TourBean extends BaseBean implements Serializable {
     private Tour tourSel;
     private List<TipoTour> tiposTours;
     private List<Crucero> cruceros;
-
+    private String codigoTipoTour;
+    private String codigoCrucero;
     @Inject
     private TourService tourService;
     @Inject
@@ -67,9 +73,9 @@ public class TourBean extends BaseBean implements Serializable {
         if (this.enBusquedaPorTipo) {
             TipoTour tipoTour = new TipoTour();
             tipoTour.setCodigo(this.tipoTourBusqueda);
-            //this.tours = this.tourService.buscarPorTipo(recuperaTipoTour(tipoTour));
+            this.tours = this.tourService.buscarPorTipo(recuperaTipoTour(tipoTour));
         } else {
-           // this.tours = this.tourService.buscarPorFechas(this.fechaInicioBusqueda, this.fechaFinBusqueda);
+            this.tours = this.tourService.buscarPorFechas(this.fechaInicioBusqueda, this.fechaFinBusqueda);
         }
     }
 
@@ -118,16 +124,18 @@ public class TourBean extends BaseBean implements Serializable {
 
     public void guardar() {
         try {
-            
-            tour.setTipoTour(retornaTipoTour(this.tour));
-            tour.setCrucero(retornaCrucero(this.tour));
+            LOG.info("Crucero: "+this.cruceroService.obtenerPorCodigo(this.codigoCrucero)+ "-"+this.codigoCrucero);
+            LOG.info("TipoTour: "+this.tipoTourService.obtenerPorCodigo(this.codigoTipoTour)+"-"+this.codigoTipoTour);
+            tour.setTipoTour(this.tipoTourService.obtenerPorCodigo(this.codigoTipoTour));
+            tour.setCrucero(this.cruceroService.obtenerPorCodigo(this.codigoCrucero));
 
             if (this.enAgregar) {
+                LOG.info(""+this.tour.toString());
                 this.tourService.crear(this.tour);
                 FacesUtil.addMessageInfo("Se agrego el Tour: " + this.tour.getNombre());
             } else {
                 this.tourService.modificar(this.tour);
-                FacesUtil.addMessageInfo("Se modific\u00f3 la Actividad con c\u00f3digo: " + this.tour.getCodigo());
+                FacesUtil.addMessageInfo("Se modific\u00f3 el tour con c\u00f3digo: " + this.tour.getCodigo());
             }
 
         } catch (Exception e) {
@@ -142,6 +150,24 @@ public class TourBean extends BaseBean implements Serializable {
         this.cruceros = this.cruceroService.obtenerTodos();
     }
 
+    public String getCodigoTipoTour() {
+        return codigoTipoTour;
+    }
+
+    public void setCodigoTipoTour(String codigoTipoTour) {
+        this.codigoTipoTour = codigoTipoTour;
+    }
+
+    public String getCodigoCrucero() {
+        return codigoCrucero;
+    }
+
+    public void setCodigoCrucero(String codigoCrucero) {
+        this.codigoCrucero = codigoCrucero;
+    }
+
+    
+    
     public Tour getTour() {
         return tour;
     }

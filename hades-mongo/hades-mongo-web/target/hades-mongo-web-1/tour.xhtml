@@ -10,7 +10,8 @@
         <ui:define name="contenido">
             <p:panel id="mainPnl" header="Tours" style="width: 80%; margin: auto;">
                 <p:panel id="buscPnl" header="B&#250;squeda">
-                    <p:panelGrid columns="4" style="margin-top:10px">
+                    <p:panelGrid columns="4" style="margin-top:10px" >
+                        
                         <p:outputLabel for="filtroCmb" value="Buscar:" />
                         <p:selectOneMenu id="filtroCmb" value="#{tourBean.filtro}" required="true"  valueChangeListener="#{tourBean.cambiarFiltro()}" >
                             <p:ajax update="@form"/>
@@ -79,11 +80,11 @@
                         <p:outputLabel for="codigo" value="C&#243;digo" />
                         <p:inputText id="codigo" value="#{tourBean.tour.codigo}" disabled="true" />
                         <p:outputLabel for="tipoTourCmb" value="Tipo Tour"/>
-                        <p:selectOneMenu id="tipoTourCmb" value="#{tourBean.tour.tipoTour.codigo}" style="width:175px">
+                        <p:selectOneMenu id="tipoTourCmb" value="#{tourBean.codigoTipoTour}" style="width:175px">
                             <f:selectItems var="tipoTour" value="#{tourBean.tiposTours}" itemLabel="#{tipoTour.nombre}" itemValue="#{tipoTour.codigo}"/>
                         </p:selectOneMenu>
                         <p:outputLabel for="cruceroCmb" value="Crucero"/>
-                        <p:selectOneMenu id="cruceroCmb" value="#{tourBean.tour.crucero.codigo}" style="width:175px">
+                        <p:selectOneMenu id="cruceroCmb" value="#{tourBean.codigoCrucero}" style="width:175px">
                             <f:selectItems var="crucero" value="#{tourBean.cruceros}" itemLabel="#{crucero.nombre}" itemValue="#{crucero.codigo}"/>
                         </p:selectOneMenu>
                         <p:outputLabel for="nombre" value="Nombre" />

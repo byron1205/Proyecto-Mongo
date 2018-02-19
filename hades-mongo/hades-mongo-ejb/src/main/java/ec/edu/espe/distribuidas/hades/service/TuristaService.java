@@ -8,6 +8,7 @@
 package ec.edu.espe.distribuidas.hades.service;
 
 import ec.edu.espe.distribuidas.hades.dao.TuristaDAO;
+import ec.edu.espe.distribuidas.hades.model.Reserva;
 import ec.edu.espe.distribuidas.hades.model.TuristaReserva;
 import ec.edu.espe.distribuidas.nosql.mongo.MongoPersistence;
 import java.util.List;
@@ -37,6 +38,10 @@ public class TuristaService {
         return this.turistaDao.find().asList();
     }
 
+    public List<TuristaReserva> obtenerTodos(Integer reserva) {
+        return this.turistaDao.findByReserva(reserva);
+    }
+    
     public TuristaReserva obtenerPorCodigo(String codigo) {
         return this.turistaDao.findOne("codigo", codigo);
     }

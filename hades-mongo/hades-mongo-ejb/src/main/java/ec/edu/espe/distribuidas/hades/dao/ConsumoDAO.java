@@ -8,8 +8,10 @@ package ec.edu.espe.distribuidas.hades.dao;
 import ec.edu.espe.distribuidas.hades.model.Camarote;
 import ec.edu.espe.distribuidas.hades.model.Consumo;
 import ec.edu.espe.distribuidas.hades.model.Crucero;
+import ec.edu.espe.distribuidas.hades.model.Menu;
 import ec.edu.espe.distribuidas.hades.model.Reserva;
 import ec.edu.espe.distribuidas.hades.model.TipoCamarote;
+import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -28,8 +30,26 @@ public class ConsumoDAO  extends BasicDAO<Consumo, ObjectId> {
     
     public List<Consumo> findByReserva(Reserva reserva) {
         Query<Consumo> qry = getDatastore().createQuery(Consumo.class);
-        qry.criteria("cod_reserva").equal(reserva);
+        qry.criteria("reserva").equal(reserva);
         return qry.asList();
     }
+    
+     public List<Consumo> findByReservaMenu(Reserva reserva, Menu menu) {
+        Query<Consumo> qry = getDatastore().createQuery(Consumo.class);
+        qry.and(
+                qry.criteria("reserva").equal(reserva),
+                qry.criteria("menu").equal(menu)
+        );
+        return qry.asList();
+    }
+     
+      public List<Consumo> findFecha(Date dateI, Date dateF) {
+        Query<Consumo> qry = getDatastore().createQuery(Consumo.class);
+        qry.filter("fecha >=", dateI);
+        qry.filter("fecha <=", dateF);
+        return qry.asList();
+    }
+    
+    
     
 }

@@ -47,6 +47,8 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
     private String codMenu;
     private String codReserva;
     private String tipoMenu;
+    
+    private Boolean mostrar;
 
     private List<Menu> listaMenu;
     private List<Menu> tiposMenu;
@@ -92,9 +94,10 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
         this.consumo = new Consumo();
         this.reserva = new Reserva();
         this.valor = 0.0;
-        this.codMenu = "";
+        //this.codMenu = "";
         this.codReserva = "";
-        this.tipoMenu = "";
+        this.tipoMenu = "ENT";
+        this.mostrar = true;
 
         //this.tiposMenu = this.menuService.obtenerTodos();
         //this.camarotes = this.camaroteService.obtenerTodos();
@@ -112,34 +115,42 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
 
         this.consumosSel = new ArrayList<>();
         this.consumosFil = new ArrayList<>();
-        this.consumos = this.consumoService.obtenerTodos();
+        //this.consumos = this.consumoService.obtenerTodos();
         //this.buscarPorTipo();
+        if (!"".equals(this.codMenu)) {
+            this.reserva = this.reservaService.obtenerPorIdentificacion(this.codReserva);
+            this.consumos = this.consumoService.obtenerPorReserva(reserva);
 
-        for (Consumo con : consumos) {
+            /*for (Consumo con : consumos) {
             if (con.getReserva().getCodigo().equals(this.codReserva)) {
                 this.consumosSel.add(con);
                 System.out.println("Consumos por Reserva: " + con.getMenu().getNombre());
             }
-        }
+        }*/
+            if (!this.filtro.equals("RES")) {
+                if (this.filtro.equals("MEN")) {
+                    if (!"".equals(this.codMenu)) {
+                        this.menu = this.menuService.obtenerPorCodigo(Integer.parseInt(this.codMenu));
+                        this.consumos = this.consumoService.obtenerPorReservaMenu(this.reserva, this.menu);
 
-        if (!this.filtro.equals("RES")) {
-            if (this.filtro.equals("MEN")) {
-                if (!"".equals(this.codMenu)) {
-                    System.out.println("Entre MEN");
+                        /*System.out.println("Entre MEN");
                     for (Consumo con : consumosSel) {
                         if (con.getMenu().getCodigo().toString().equals(this.codMenu)) {
                             this.consumosFil.add(con);
                             System.out.println("Consumos por Menu: " + con.getMenu().getNombre());
                         }
                     }
-                    this.consumosSel = this.consumosFil;
-                }
-            } else {
-                System.out.println("Fecha Inicio: " + this.fechaInicioBusqueda);
-                System.out.println("Fecha Fin: " + this.fechaFinBusqueda);
-                if (this.fechaInicioBusqueda != null && this.fechaFinBusqueda != null) {
-                    System.out.println("Entre fechas");
-                    for (Consumo con : consumosSel) {
+                    this.consumosSel = this.consumosFil;*/
+                    }
+                } else {
+                    System.out.println("Fecha Inicio: " + this.fechaInicioBusqueda);
+                    System.out.println("Fecha Fin: " + this.fechaFinBusqueda);
+                    if (this.fechaInicioBusqueda != null && this.fechaFinBusqueda != null) {
+                        System.out.println("Entre fechas");
+
+                        this.consumos = this.consumoService.obtenerPorFecha(this.fechaInicioBusqueda, this.fechaFinBusqueda);
+
+                        /*for (Consumo con : consumosSel) {
                         if (con.getFecha() != null) {
                             if (con.getFecha().getTime() >= this.fechaInicioBusqueda.getTime()
                                     && con.getFecha().getTime() <= this.fechaFinBusqueda.getTime()) {
@@ -148,14 +159,14 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
                             }
                         }
 
+                    }*/
+                        //this.consumosSel = this.consumosFil;
                     }
-                    this.consumosSel = this.consumosFil;
                 }
             }
         }
 
-        this.consumos = this.consumosSel;
-
+        //this.consumos = this.consumosSel;
     }
 
     public void buscarPorTipoMenu() {
@@ -199,7 +210,7 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
         //System.out.println(this.menu.getTipo());
         //System.out.println("menu:" + this.codMenu);
         //this.menu.setCodigo(Integer.parseInt(this.codMenu));
-        System.out.println(this.menu.getCodigo());
+        System.out.println("Menu:" + this.menu.getCodigo());
         //System.out.println(this.consumo.getCantidad());
 
         this.valor = 0.0;
@@ -262,9 +273,13 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
         this.consumo = new Consumo();
         this.menu = new Menu();
         this.reserva = new Reserva();
+        this.mostrar =true;
     }
 
     public void guardar() {
+        
+        System.out.println("En guardar Menu: " + this.codMenu);
+        
         try {
             if (this.enAgregar) {
                 Calendar cal = Calendar.getInstance();
@@ -285,18 +300,21 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
         } catch (Exception ex) {
             FacesUtil.addMessageError(null, "Ocurrí\u00f3 un error al actualizar la informaci\u00f3n");
         }
-        
+        this.buscar();
         super.reset();
         this.consumo = new Consumo();
         this.menu = new Menu();
         this.reserva = new Reserva();
-        this.buscar();
+        this.mostrar =true;
+        
+        this.buscarPorTipoMenu();
         //this.listaMenu = this.menuService.obtenerTodos();
 
     }
 
     @Override
     public void agregar() {
+        this.mostrar = false;
         this.consumo = new Consumo();
         this.menu = new Menu();
         this.menu.setCodigo(0);
@@ -304,7 +322,9 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
         this.reserva = new Reserva();
         this.menu.setTipo(MenuEnum.ENT);
         this.consumo.setCantidad(1);
-        this.buscarPorTipo();
+        this.tipoMenu="ENT";
+        
+        this.buscarPorTipoMenu();
         super.agregar();
     }
 
@@ -334,6 +354,7 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
         } else if (this.getFiltro().equals("MEN")) {
             this.enBusquedaPorMenu = true;
             this.enBusquedaPorFecha = false;
+            this.buscarPorTipoMenu();
         } else {
             this.enBusquedaPorMenu = false;
             this.enBusquedaPorFecha = true;
@@ -538,4 +559,13 @@ public class ConsumoAdminBean extends BaseBean implements Serializable {
         this.enBusquedaPorMenu = enBusquedaPorMenu;
     }
 
+    public Boolean getMostrar() {
+        return mostrar;
+    }
+
+    public void setMostrar(Boolean mostrar) {
+        this.mostrar = mostrar;
+    }
+
+    
 }

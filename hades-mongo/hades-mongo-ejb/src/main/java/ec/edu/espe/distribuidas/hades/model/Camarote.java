@@ -27,8 +27,6 @@ public class Camarote extends BaseEntity{
     private Integer numero;
     private Integer capacidad;
     private String ubicacion;
-    private String nomCrucero;
-    private String nomTipo;
 
     public Camarote(Integer codigo) {
         this.codigo = codigo;
@@ -45,24 +43,6 @@ public class Camarote extends BaseEntity{
         this.codigo = codigo;
     }
 
-    public String getNomCrucero() {
-        return nomCrucero;
-    }
-
-    public void setNomCrucero(String nomCrucero) {
-        this.nomCrucero = nomCrucero;
-    }
-
-    public String getNomTipo() {
-        return nomTipo;
-    }
-
-    public void setNomTipo(String nomTipo) {
-        this.nomTipo = nomTipo;
-    }
-
-   
-    
     
     public Crucero getCrucero() {
         return crucero;

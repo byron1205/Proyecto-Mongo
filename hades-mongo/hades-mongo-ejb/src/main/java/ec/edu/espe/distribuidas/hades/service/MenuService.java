@@ -10,6 +10,7 @@ package ec.edu.espe.distribuidas.hades.service;
 import ec.edu.espe.distribuidas.hades.dao.MenuDAO;
 import ec.edu.espe.distribuidas.hades.model.Menu;
 import ec.edu.espe.distribuidas.nosql.mongo.MongoPersistence;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -37,15 +38,18 @@ public class MenuService {
         return this.menuDao.find().asList();
     }
 
-    public Menu obtenerPorCodigo(Integer codigo) {
+    public Menu obtenerPorCodigo(String codigo) {
         return this.menuDao.findOne("codigo", codigo);
     }
 
+//    public void crear(Menu cliente) {
+//        this.menuDao.save(cliente);
+//    }
     public void crear(Menu menu) {
         List<Menu> aux = this.menuDao.find().asList();
         Integer codigo;
         if (aux.isEmpty()) {
-            codigo = 1;
+            codigo = 1000;
         } else {
             Integer count = aux.size();
             Menu last = aux.get(count - 1);
@@ -53,6 +57,28 @@ public class MenuService {
         }
         menu.setCodigo(codigo);
         this.menuDao.save(menu);
+    }
+    
+    public List<Menu> obtenerLicores(){
+        List<Menu> aux = this.menuDao.find().asList();
+        List<Menu> lst = new ArrayList<>();
+        for (Menu m : aux){
+            if(m.getNombre().contains("L")){
+                lst.add(m);
+            }
+        }
+        return lst;
+    }
+    
+    public List<Menu> obtenerSnacks(){
+        List<Menu> aux = this.menuDao.find().asList();
+        List<Menu> lst = new ArrayList<>();
+        for (Menu m : aux){
+            if(m.getNombre().contains("S")){
+                lst.add(m);
+            }
+        }
+        return lst;
     }
 
     public void modificar(Menu menu) {

@@ -51,7 +51,7 @@ public class CamaroteAdminBean extends BaseBean implements Serializable{
     public void init() {
         this.cruceros = this.cruceroService.obtenerTodos();
         this.tiposCamarote = this.tipoCamaroteService.obtenerTodos();
-        this.camarotes = this.camaroteService.obtenerTodos();
+        //this.camarotes = this.camaroteService.obtenerTodos();
     }
     
     public void buscar(){

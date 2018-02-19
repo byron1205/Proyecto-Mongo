@@ -54,4 +54,8 @@ public class CamaroteService {
 //    public Camarote obtenerInfoCamarote(String codCrucero, Integer numCamarote){
 //        return this.camaroteFacade.findCodTipCamarote(codCrucero, numCamarote);
 //    }
+    
+    public void crear(Camarote camarote) {
+        this.camaroteFacade.save(camarote);
+    }
 }

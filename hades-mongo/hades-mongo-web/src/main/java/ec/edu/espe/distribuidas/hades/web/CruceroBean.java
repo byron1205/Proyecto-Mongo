@@ -8,11 +8,16 @@
 package ec.edu.espe.distribuidas.hades.web;
 
 import ec.edu.espe.distribuidas.hades.enums.TipoCruceroEnum;
+import ec.edu.espe.distribuidas.hades.model.Camarote;
 import java.util.List;
 import ec.edu.espe.distribuidas.hades.model.Crucero;
+import ec.edu.espe.distribuidas.hades.model.TipoCamarote;
+import ec.edu.espe.distribuidas.hades.service.CamaroteService;
 import ec.edu.espe.distribuidas.hades.service.CruceroService;
+import ec.edu.espe.distribuidas.hades.service.TipoCamaroteService;
 import ec.edu.espe.distribuidas.hades.web.util.FacesUtil;
 import java.io.Serializable;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -25,26 +30,92 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class CruceroBean extends BaseBean implements Serializable{
+
+    private static final Logger LOG = Logger.getLogger(CruceroBean.class.getName());
     
     private List <Crucero> cruceros;
-    
     private Crucero crucero;
-    
+
     private Crucero cruceroSel;
     
     @Inject
     private CruceroService cruceroService;
+    @Inject
+    private CamaroteService camaroteService;
+    @Inject
+    private TipoCamaroteService tipoCamaroteService;
     
     @PostConstruct
     public void init() {
         this.cruceros = this.cruceroService.obtenerTodos();
         this.crucero = new Crucero();
+        
     }
     
     public List<Crucero> getCruceros() {
         return cruceros;
     }
     
+    public void crearCamarotes(Crucero crucero){
+        Integer codInicial = 100;
+        Integer codigo = codInicial + this.camaroteService.obtenerTodos().size();
+        Integer numCamarotesAlfa= 12;
+        Integer numCamarotesOmega= 15;
+        Camarote camarote;
+        TipoCamarote tipoCamarotePre= this.tipoCamaroteService.obtenerPorNombre("Presidencial");
+        TipoCamarote tipoCamarotePla = this.tipoCamaroteService.obtenerPorNombre("Placer");
+        TipoCamarote tipoCamaroteEco = this.tipoCamaroteService.obtenerPorNombre("Ecologico");
+        LOG.info("Codigo Camarote: "+codigo+"-"+tipoCamarotePre);
+        
+        if(crucero.getTipo().getTexto().equals("ALFA")){
+            for(int i =0; i < numCamarotesAlfa; i++){
+                camarote =  new Camarote();
+                camarote.setCodigo(codigo+i);
+                camarote.setCrucero(this.crucero);
+                camarote.setNumero(i+1);
+                if(i<3){
+                    camarote.setTipo(tipoCamarotePre);
+                    camarote.setCapacidad(4);
+                    camarote.setUbicacion("A");
+                }
+                else if(i < 6){
+                    camarote.setTipo(tipoCamarotePla);
+                    camarote.setCapacidad(5);
+                    camarote.setUbicacion("B");
+                }
+                else {
+                    camarote.setTipo(tipoCamaroteEco);
+                    camarote.setCapacidad(6);
+                    camarote.setUbicacion("C");
+                }
+                this.camaroteService.crear(camarote);
+            }
+        }
+        else{
+            for(int i =0; i < numCamarotesOmega; i++){
+                camarote =  new Camarote();
+                camarote.setCodigo(codigo+i);
+                camarote.setCrucero(this.crucero);
+                camarote.setNumero(i+1);
+                if(i<4){
+                    camarote.setTipo(tipoCamarotePre);
+                    camarote.setCapacidad(4);
+                    camarote.setUbicacion("A");
+                }
+                else if(i < 8){
+                    camarote.setTipo(tipoCamarotePla);
+                    camarote.setCapacidad(5);
+                    camarote.setUbicacion("B");
+                }
+                else {
+                    camarote.setTipo(tipoCamaroteEco);
+                    camarote.setCapacidad(6);
+                    camarote.setUbicacion("C");
+                }
+                this.camaroteService.crear(camarote);
+            }
+        }
+    }
     @Override
     public void agregar() {
         this.crucero = new Crucero();
@@ -88,6 +159,7 @@ public class CruceroBean extends BaseBean implements Serializable{
         try {
             if (this.enAgregar) {
                 this.cruceroService.crear(this.crucero);
+                crearCamarotes(this.crucero);
                 FacesUtil.addMessageInfo("Se agreg\u00f3 el item al men\u00fa: " + this.crucero.getNombre());
             } else {
                 this.cruceroService.modificar(this.crucero);

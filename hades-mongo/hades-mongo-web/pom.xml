@@ -36,9 +36,9 @@
             <version>1.3.2</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>ec.edu.espe.educat</groupId>
             <artifactId>hades-mongo-ejb</artifactId>
-            <version>${project.version}</version>
+            <version>1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

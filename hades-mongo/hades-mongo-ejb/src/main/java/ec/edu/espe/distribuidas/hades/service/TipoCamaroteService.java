@@ -41,6 +41,10 @@ public class TipoCamaroteService {
         return this.tipoCamaroteFacade.findOne("codigo", codigo);
     }
 
+    public TipoCamarote obtenerPorNombre(String nombre) {
+        return this.tipoCamaroteFacade.findByNombre(nombre);
+    }
+    
     public void crear(TipoCamarote tipoCamarote) {
         this.tipoCamaroteFacade.save(tipoCamarote);
     }

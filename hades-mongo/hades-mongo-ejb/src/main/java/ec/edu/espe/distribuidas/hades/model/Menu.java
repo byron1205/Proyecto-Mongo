@@ -33,7 +33,6 @@ public class Menu extends BaseEntity {
     public Menu(Integer codigo) {
         this.codigo = codigo;
     }
-    
 
     public Integer getCodigo() {
         return codigo;

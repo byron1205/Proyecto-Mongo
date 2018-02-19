@@ -12,9 +12,9 @@ and open the template in the editor.
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition template="/templates/plantilla.xhtml">
         <ui:define name="contenido">
-            <p:panel header="Tipo Valor" style="width: 50%; margin: auto;">
+            <p:panel header="Tipo Valor" style="width: 60%; margin: auto;">
                 <p:dataTable var="tipoValor" value="#{tipoValorBean.tiposValor}" 
-                             selectionMode="single" selection="#{tipoValorBean.tipoValorSel}" rowKey="#{tipoValor.codigo}">
+                             selectionMode="single" selection="#{tipoValorBean.tipoValorSel}" rowKey="#{tipoValor.codigo}" style="margin-bottom: 20px">
                     <p:ajax event="rowSelect" update="@form" />
                     <p:ajax event="rowUnselect" update="@form" />
                     <p:column headerText="C&#243;digo">
@@ -39,29 +39,36 @@ and open the template in the editor.
                 <p:commandButton value="Eliminar" actionListener="#{tipoValorBean.eliminar()}" update="@form" disabled="#{tipoValorBean.tipoValorSel eq null}" >
                     <p:confirm header="Confirmaci&#243;n" message="Desea eliminar el tipo de Valor: #{tipoValorBean.tipoValorSel.nombre}}" icon="ui-icon-alert" />
                 </p:commandButton>
-                <p:panel header="#{tipoValorBean.titulo} Tipo Valor" visible="#{tipoValorBean.habilitaForm}">
-                    <p:panelGrid columns="2">
-                        <p:outputLabel for="codigo" value="C&#243;digo" />
-                        <p:inputText id="codigo" value="#{tipoValorBean.tipoValor.codigo}" disabled="#{tipoValorBean.enModificar}"/>
-                        <p:outputLabel for="nombre" value="Nombre" />
-                        <p:inputText id="nombre" value="#{tipoValorBean.tipoValor.nombre}"  />
-                        <p:outputLabel for="descripcion" value="Descripci&#243;n" />
-                        <p:inputText id="descripcion" value="#{tipoValorBean.tipoValor.descripcion}"  />
-                        <p:outputLabel for="tipoCobro" value="Tipo Cobro" />
-                        <p:selectOneMenu id="tipoCobro" value="#{tipoValorBean.tipoValor.tipoCobro}" style="width:175px">
-                            <f:selectItem itemLabel="Seleccionar uno" itemValue="" />
-                            <f:selectItem itemLabel="Porcentaje" itemValue="POR" />
-                            <f:selectItem itemLabel="Valor" itemValue="VAL" />
-                        </p:selectOneMenu>
-                        <p:outputLabel for="orden" value="Orden" />
-                        <p:selectOneMenu id="orden" value="#{tipoValorBean.tipoValor.orden}" style="width:175px">
-                            <f:selectItem itemLabel="Seleccionar uno" itemValue="" />
-                            <f:selectItem itemLabel="Incremento" itemValue="INC" />
-                            <f:selectItem itemLabel="Decremento" itemValue="DEC" />
-                        </p:selectOneMenu>
-                    </p:panelGrid>
+                <p:panel header="#{tipoValorBean.titulo} Tipo Valor" visible="#{tipoValorBean.habilitaForm}" style="margin-top: 20px">
+                    <div class="ui-fluid">
+                        <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank" style="margin-top: 20px" >
+                            <p:outputLabel for="codigo" value="C&#243;digo" />
+                            <p:inputText id="codigo" value="#{tipoValorBean.tipoValor.codigo}" disabled="#{tipoValorBean.enModificar}"/>
+
+
+                            <p:outputLabel for="nombre" value="Nombre" />
+                            <p:inputText id="nombre" value="#{tipoValorBean.tipoValor.nombre}"  />
+
+                            <p:outputLabel for="descripcion" value="Descripci&#243;n" />
+                            <p:inputText id="descripcion" value="#{tipoValorBean.tipoValor.descripcion}"  />
+                            <p:outputLabel for="tipoCobro" value="Tipo Cobro" />
+                            <p:selectOneMenu id="tipoCobro" value="#{tipoValorBean.tipoValor.tipoCobro}" style="width:175px">
+                                <f:selectItem itemLabel="Seleccionar uno" itemValue="" />
+                                <f:selectItem itemLabel="Porcentaje" itemValue="POR" />
+                                <f:selectItem itemLabel="Valor" itemValue="VAL" />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="orden" value="Orden" />
+                            <p:selectOneMenu id="orden" value="#{tipoValorBean.tipoValor.orden}" style="width:175px">
+                                <f:selectItem itemLabel="Seleccionar uno" itemValue="" />
+                                <f:selectItem itemLabel="Incremento" itemValue="INC" />
+                                <f:selectItem itemLabel="Decremento" itemValue="DEC" />
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                    </div>
+                    <p:spacer height="20px"/>
                     <p:commandButton value="Aceptar" actionListener="#{tipoValorBean.guardar}" update="@form" />
                     <p:commandButton value="Cancelar" actionListener="#{tipoValorBean.cancelar}" update="@form" />
+                    <p:spacer height="20px"/>
                 </p:panel>
             </p:panel>
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
